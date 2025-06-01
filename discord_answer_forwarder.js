@@ -69,7 +69,7 @@ client.on('messageCreate', async message => {
                     console.log('Original message deleted');
                     
                     // Send the encrypted message as a new message
-                    const encryptedMsg = await message.channel.send(`🔒 ${displayName}: Answer submitted`);
+                    const encryptedMsg = await message.channel.send(`🔒 ${displayName}:  commander, answer submitted successfully 🫡`);
                     console.log('Encrypted message sent');
                     
                     // Add a reaction to indicate the message was processed
@@ -78,7 +78,7 @@ client.on('messageCreate', async message => {
                 } catch (deleteError) {
                     console.error('Error in message processing:', deleteError);
                     // If we can't delete the message, at least send the encrypted version
-                    const encryptedMsg = await message.channel.send(`🔒 ${displayName}: Answer submitted`);
+                    const encryptedMsg = await message.channel.send(`🔒 ${displayName}:  commander, answer submitted successfully 🫡`);
                     await encryptedMsg.react('✅');
                 }
             } else {
