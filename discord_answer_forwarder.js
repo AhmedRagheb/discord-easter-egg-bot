@@ -50,8 +50,11 @@ client.on('messageCreate', async message => {
             const targetChannel = await client.channels.fetch(process.env.TARGET_CHANNEL_ID);
             
             if (targetChannel) {
-                // Create the forwarded message with the author's name
-                const forwardedMessage = `${message.author.username}: ${message.content}`;
+                // Get the member's display name (nickname) or fallback to username
+                const displayName = message.member?.displayName || message.author.username;
+                
+                // Create the forwarded message with the author's display name
+                const forwardedMessage = `${displayName}: ${message.content}`;
                 
                 // Send the message to the target channel
                 await targetChannel.send(forwardedMessage);
@@ -66,7 +69,7 @@ client.on('messageCreate', async message => {
                     console.log('Original message deleted');
                     
                     // Send the encrypted message as a new message
-                    const encryptedMsg = await message.channel.send(`🔒 ${message.author.username}: commander, answer submitted successfully!`);
+                    const encryptedMsg = await message.channel.send(`🔒 ${displayName}: Answer submitted`);
                     console.log('Encrypted message sent');
                     
                     // Add a reaction to indicate the message was processed
@@ -75,7 +78,7 @@ client.on('messageCreate', async message => {
                 } catch (deleteError) {
                     console.error('Error in message processing:', deleteError);
                     // If we can't delete the message, at least send the encrypted version
-                    const encryptedMsg = await message.channel.send(`🔒 ${message.author.username}: commander, answer submitted successfully!`);
+                    const encryptedMsg = await message.channel.send(`🔒 ${displayName}: Answer submitted`);
                     await encryptedMsg.react('✅');
                 }
             } else {
