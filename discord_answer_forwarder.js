@@ -10,6 +10,11 @@ function encryptMessage(text) {
     });
 }
 
+// Function to check if string is numeric
+function isNumeric(str) {
+    return /^\d+$/.test(str.trim());
+}
+
 // Get source channels from environment variable, handling both single and multiple channels
 const sourceChannels = process.env.SOURCE_CHANNEL_ID
     ? process.env.SOURCE_CHANNEL_ID.split(',').map(id => id.trim()).filter(id => id)
@@ -45,6 +50,17 @@ client.on('messageCreate', async message => {
     if (sourceChannels.includes(message.channel.id)) {
         try {
             console.log('Message received in source channel:', message.content);
+            
+            // Check if the message is numeric
+            if (!isNumeric(message.content)) {
+                // Delete the non-numeric message
+                await message.delete();
+                // Send error message
+                const errorMsg = await message.channel.send(`❌ ${message.member?.displayName || message.author.username}: commander, Only numbers are allowed as answers!`);
+                // Delete error message after 5 seconds
+                setTimeout(() => errorMsg.delete().catch(console.error), 5000);
+                return;
+            }
             
             // Get the target channel
             const targetChannel = await client.channels.fetch(process.env.TARGET_CHANNEL_ID);
