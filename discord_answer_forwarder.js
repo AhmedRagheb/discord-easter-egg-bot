@@ -12,7 +12,7 @@ function encryptMessage(text) {
 
 // Function to check if string is numeric
 function isNumeric(str) {
-    return /^\d+$/.test(str.trim());
+    return /^-?\d+$/.test(str.trim());
 }
 
 // Get source channels from environment variable, handling both single and multiple channels
